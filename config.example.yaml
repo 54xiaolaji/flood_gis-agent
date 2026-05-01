@@ -1,0 +1,81 @@
+project:
+  name: "洪水风险图制图质检一体化 Agent"
+  # 可按实际项目修改。示例：EPSG:4547 为 CGCS2000 / 3-degree Gauss-Kruger CM 114E
+  target_crs: "EPSG:4547"
+  scan_recursive: true
+
+qc_rules:
+  check_crs: true
+  check_geometry_valid: true
+  check_empty_layer: true
+  check_required_fields: true
+  check_raster_nodata: true
+  check_bounds_overlap: true
+  # 栅格 NoData 比例超过该阈值时给出警告
+  max_nodata_ratio: 0.85
+  # 与行政边界或编制范围的外包矩形重叠率低于该阈值时给出警告
+  min_bbox_overlap_ratio: 0.10
+
+map:
+  dpi: 200
+  figsize: [11.69, 8.27]
+  boundary_keywords: ["行政区", "边界", "范围", "boundary", "district", "region", "area"]
+  label_field_candidates: ["名称", "name", "NAME", "村名", "行政区", "乡镇", "安置区"]
+  output_format: "png"
+
+expected_layers:
+  - key: flood_depth
+    title: "淹没水深"
+    keywords: ["淹没水深", "水深", "depth", "water_depth", "max_depth"]
+    kind: "raster_or_vector"
+    required_fields: []
+    cmap: "Blues"
+
+  - key: max_velocity
+    title: "最大流速"
+    keywords: ["最大流速", "流速", "velocity", "vel", "max_velocity"]
+    kind: "raster_or_vector"
+    required_fields: []
+    cmap: "YlOrRd"
+
+  - key: arrival_time
+    title: "到达时间"
+    keywords: ["到达时间", "到达", "arrival", "arrive", "time_arrival"]
+    kind: "raster_or_vector"
+    required_fields: []
+    cmap: "viridis"
+
+  - key: duration
+    title: "淹没历时"
+    keywords: ["淹没历时", "历时", "duration", "inundation_duration"]
+    kind: "raster_or_vector"
+    required_fields: []
+    cmap: "PuBu"
+
+  - key: inundation_area
+    title: "淹没范围"
+    keywords: ["淹没范围", "淹没面", "inundation", "flood_extent", "extent"]
+    kind: "vector"
+    required_fields: []
+    cmap: "Blues"
+
+  - key: transfer_route
+    title: "转移路线"
+    keywords: ["转移路线", "避险路线", "路线", "route", "evacuation"]
+    kind: "vector"
+    required_fields: ["转移路线"]
+    cmap: "tab20"
+
+  - key: shelter
+    title: "安置点"
+    keywords: ["安置点", "避难点", "避险点", "shelter", "resettlement"]
+    kind: "vector"
+    required_fields: ["安置区"]
+    cmap: "tab20"
+
+  - key: village
+    title: "村庄或转移单元"
+    keywords: ["村庄", "村", "转移单元", "village", "community"]
+    kind: "vector"
+    required_fields: []
+    cmap: "tab20"
